@@ -21,6 +21,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const toggleBtn = modal.querySelector("[data-wpstb-toggle]");
         const closeBtns = modal.querySelectorAll("[data-wpstb-close]");
 
+        const profileCardEl = modal.querySelector("[data-wpstb-profile]");
+        const profileImgEl = modal.querySelector("[data-wpstb-profile-img]");
+        const profileNameEl = modal.querySelector("[data-wpstb-profile-name]");
+
         const nameEl = modal.querySelector("[data-wpstb-name]");
         const profileLinkEl = modal.querySelector("[data-wpstb-profile-link]");
 
@@ -203,7 +207,7 @@ document.addEventListener("DOMContentLoaded", () => {
             translateTo(i);
             setSlideActive(i);
             setBarActive(i);
-            updateHeader();
+            // updateHeader();
         }
 
         function setSlideActive(i) {
@@ -240,6 +244,33 @@ document.addEventListener("DOMContentLoaded", () => {
                 profileLinkEl.href = entryUrl;
             } else {
                 profileLinkEl.hidden = true;
+            }
+        }
+
+        function renderProfile(title, url, photo) {
+            if (!profileCardEl) return;
+
+            const hasAny = !!(url || title || photo);
+
+            profileCardEl.hidden = !hasAny;
+            if (!hasAny) return;
+
+            if (url) {
+                profileCardEl.setAttribute("href", url);
+            } else {
+                profileCardEl.removeAttribute("href");
+            }
+
+            if (profileNameEl) profileNameEl.textContent = title || "";
+
+            if (profileImgEl) {
+                if (photo) {
+                    profileImgEl.src = photo;
+                    profileImgEl.alt = title || "";
+                    profileImgEl.hidden = false;
+                } else {
+                    profileImgEl.hidden = true;
+                }
             }
         }
 
@@ -399,12 +430,27 @@ document.addEventListener("DOMContentLoaded", () => {
         // ---------------------------
         function buildFromStory(storyEl) {
             const items = storyEl.querySelectorAll(".items li a");
+            const firstItem = storyEl.querySelector(".items li a");
+
             if (!items.length) return false;
 
             slidesWrap.innerHTML = "";
             barsWrap.innerHTML = "";
 
-            entryUrl = storyEl.querySelector(".wpstb-avatar-link")?.getAttribute("href") || null;
+            entryUrl = firstItem?.getAttribute("data-link") || null;
+
+            const storyTitle =
+                firstItem?.getAttribute("data-linkText") ||
+                storyEl.querySelector(".wpstb-name")?.textContent?.trim() ||
+                "";
+
+            const storyPhoto =
+                storyEl.getAttribute("data-photo") ||
+                storyEl.querySelector("img.wpstb-avatar")?.getAttribute("src") ||
+                "";
+
+
+            renderProfile(storyTitle, entryUrl, storyPhoto);
 
             const fragSlides = document.createDocumentFragment();
             const fragBars = document.createDocumentFragment();

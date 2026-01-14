@@ -160,6 +160,34 @@ video {
     cursor: pointer;
 }
 
+.daily-stories__profile {
+    position: absolute;
+    top: 25px;
+    left: 12px;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: #fff;
+    cursor: pointer;
+}
+
+.daily-stories__profile-img {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.daily-stories__profile-name {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 1;
+    color: #fff;
+}
+
+
 .slide {
     position: relative;
     display: block;
@@ -344,6 +372,7 @@ body.menu-open .central-area .button {
     height: 100%;
     display: block;
     background: linear-gradient(rgba(0, 0, 0, 0.5), transparent);
+    pointer-events: none;
 }
 .progress-bars[data-count="1"] .bar {
     width: calc(100% - 6px);

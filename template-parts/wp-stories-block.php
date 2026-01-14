@@ -133,7 +133,8 @@ $displayStory = function ($id, $title, $link, $date, $profile_image, $preview, $
                                 $story_prev,  // profile_image
                                 $story_prev,  // preview
                                 $story_media, // video
-                                $stories_style
+                                $stories_style,
+                                $displayStory
                         );
                     }
                 }
@@ -223,6 +224,11 @@ $displayStory = function ($id, $title, $link, $date, $profile_image, $preview, $
 
         <div class="daily-stories__outer">
             <div class="progress-bars" data-count="0" data-wpstb-bars></div>
+
+            <a class="daily-stories__profile" data-wpstb-profile hidden>
+                <img class="daily-stories__profile-img" data-wpstb-profile-img alt="">
+                <span class="daily-stories__profile-name" data-wpstb-profile-name></span>
+            </a>
 
             <div class="daily-stories__container" data-wpstb-slides></div>
         </div>
