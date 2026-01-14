@@ -10,7 +10,6 @@ $stories        = get_field('stories');
 $title          = get_field('stories_title');
 $mode           = get_field('stories_mode');
 $stories_amount = (int) get_field('number_of_stories');
-$stories_style  = get_field('stories_style_block') ?: 'style_1';
 
 if (!function_exists('wpstb_starts_with')) {
     function wpstb_starts_with($haystack, $needle) {
@@ -102,7 +101,7 @@ $displayStory = function ($id, $title, $link, $date, $profile_image, $preview, $
 
 ?>
 <div id="<?php echo esc_attr($uniq_id); ?>"
-     class="wp-stories-block <?php echo esc_attr($stories_style); ?>"
+     class="wp-stories-block"
      data-wpstb="1">
 
     <?php if (!empty($title)) : ?>
@@ -130,10 +129,9 @@ $displayStory = function ($id, $title, $link, $date, $profile_image, $preview, $
                                 $story_title,
                                 $story_link,
                                 $story_date,
-                                $story_prev,  // profile_image
-                                $story_prev,  // preview
-                                $story_media, // video
-                                $stories_style,
+                                $story_prev,
+                                $story_prev,
+                                $story_media,
                                 $displayStory
                         );
                     }
@@ -194,13 +192,6 @@ $displayStory = function ($id, $title, $link, $date, $profile_image, $preview, $
                             $profile_image_url = get_the_post_thumbnail_url($story_id, 'medium') ?: '';
                         }
 
-                        // If you want preview from video (optional)
-                        if ($stories_style !== 'style_1' && !empty($video_url) && class_exists('\\ESC\\Girlzz\\ThemeFunctions')) {
-                            if (method_exists(ThemeFunctions::class, 'generateVideoPreviewFromUrl')) {
-                                $preview_url = ThemeFunctions::generateVideoPreviewFromUrl($video_url);
-                            }
-                        }
-
                         echo $displayStory(
                                 $story_id,
                                 $story_title,
@@ -209,7 +200,6 @@ $displayStory = function ($id, $title, $link, $date, $profile_image, $preview, $
                                 $profile_image_url,
                                 $preview_url,
                                 $video_url,
-                                $stories_style
                         );
                     }
                     wp_reset_postdata();

@@ -175,18 +175,6 @@ add_action('acf/init', function () {
                     ]
                 ],
             ],
-            [
-                'key' => 'field_wpstb_stories_style_block',
-                'label' => 'Stories Style',
-                'name' => 'stories_style_block',
-                'type' => 'select',
-                'choices' => [
-                    'style_1' => 'Default Style',
-                    'style_2' => 'Style 2',
-                ],
-                'default_value' => 'style_1',
-                'return_format' => 'value',
-            ],
         ],
         'location' => [
             [
