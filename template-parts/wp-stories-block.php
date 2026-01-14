@@ -118,7 +118,7 @@ $displayStory = function ($id, $title, $link, $date, $profile_image, $preview, $
 
                         $story_id    = $story['preview']['ID'] ?? '';
                         $story_title = $story['title'] ?? '';
-                        $story_link  = $story['model-link'] ?? '';
+                        $story_link  = $story['post-link'] ?? '';
                         $story_date  = !empty($story['preview']['date']) ? strtotime($story['preview']['date']) : time();
 
                         $story_prev  = $story['preview']['url'] ?? '';
