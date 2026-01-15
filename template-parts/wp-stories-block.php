@@ -19,7 +19,7 @@ if (!function_exists('wpstb_starts_with')) {
     }
 }
 
-$displayStory = function ($id, $title, $link, $date, $profile_image, $preview, $video, $style) {
+$displayStory = function ($id, $title, $link, $date, $profile_image, $preview, $video) {
 
     $id   = (string) $id;
     $date = (int) $date;
@@ -33,9 +33,6 @@ $displayStory = function ($id, $title, $link, $date, $profile_image, $preview, $
 
     // Circle image (avatar/preview)
     $img_src = $profile_image_safe;
-    if (!empty($preview_safe)) {
-        $img_src = ($style !== 'style_1') ? $preview_safe : $profile_image_safe;
-    }
 
     ob_start();
     ?>
@@ -56,12 +53,10 @@ $displayStory = function ($id, $title, $link, $date, $profile_image, $preview, $
                     <span class="time"></span>
                 </span>
 
-                <?php if ($style !== 'style_1') : ?>
-                    <img class="no-lazy profile"
-                         src="<?php echo esc_url($profile_image_safe); ?>"
-                         alt="<?php echo esc_attr($title_clean); ?>"
-                         style="display:none">
-                <?php endif; ?>
+                <img class="no-lazy profile"
+                     src="<?php echo esc_url($profile_image_safe); ?>"
+                     alt="<?php echo esc_attr($title_clean); ?>"
+                     style="display:none">
             </div>
         </div>
 
@@ -224,12 +219,12 @@ $displayStory = function ($id, $title, $link, $date, $profile_image, $preview, $
         </div>
 
 
-        <span id="prev-slide" data-wpstb-prev></span>
-        <span id="next-slide" data-wpstb-next></span>
-
-        <div class="central-area" data-state="playing" data-wpstb-toggle>
-            <div class="button">Next</div>
-        </div>
+        <span id="prev-slide" data-wpstb-prev>
+            <?php echo getInlineSvg('arrow'); ?>
+        </span>
+        <span id="next-slide" data-wpstb-next>
+            <?php echo getInlineSvg('arrow'); ?>
+        </span>
 
         <button type="button" class="daily-stories__close" data-wpstb-close aria-label="Close">
             <?php echo getInlineSvg('close'); ?>
