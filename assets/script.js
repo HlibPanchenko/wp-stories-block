@@ -82,12 +82,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 }));
             }
 
-            // backdrop click (если у тебя реально кликается modal wrapper)
             modal.addEventListener("click", (e) => {
                 if (e.target === modal) closeModal();
             });
 
-            // keyboard
             document.addEventListener("keydown", (e) => {
                 if (modal.hidden) return;
                 if (e.key === "Escape") closeModal();
@@ -95,7 +93,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (e.key === "ArrowLeft") prev();
             });
 
-            // resize
             window.addEventListener("resize", () => {
                 if (modal.hidden) return;
                 initSizes();
@@ -127,9 +124,6 @@ document.addEventListener("DOMContentLoaded", () => {
             openModal();
         }
 
-        // ---------------------------
-        // Modal open/close
-        // ---------------------------
         function openModal() {
             modal.hidden = false;
             modal.classList.add("is-open");
@@ -209,7 +203,6 @@ document.addEventListener("DOMContentLoaded", () => {
             translateTo(i);
             setSlideActive(i);
             setBarActive(i);
-            // updateHeader();
         }
 
         function setSlideActive(i) {
@@ -232,21 +225,6 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             if (bars[i]) bars[i].classList.add("is-animating");
-        }
-
-        function updateHeader() {
-            if (nameEl) {
-                const title = storyNodes[currentStoryIndex]?.querySelector(".wpstb-name")?.textContent?.trim() || "";
-                nameEl.textContent = title;
-            }
-
-            if (!profileLinkEl) return;
-            if (entryUrl) {
-                profileLinkEl.hidden = false;
-                profileLinkEl.href = entryUrl;
-            } else {
-                profileLinkEl.hidden = true;
-            }
         }
 
         function renderProfile(title, url, photo) {
@@ -289,25 +267,24 @@ document.addEventListener("DOMContentLoaded", () => {
             const v = slides[currentIndex].querySelector("video");
             if (!v) return;
 
-            // iOS/Chrome любят playsinline + muted для автоплея
+            // iOS and Chrome require playsinline + muted for autoplay
             v.playsInline = true;
             v.setAttribute("playsinline", "");
             v.preload = "metadata";
 
-            // пытаемся играть со звуком (иногда прокатывает на desktop)
+            // Try to play with sound first (may work on desktop)
             v.muted = false;
 
             const p = v.play();
 
             if (p && typeof p.catch === "function") {
                 p.catch(() => {
-                    // автоплей со звуком не дали - играем без звука
+                    // Autoplay with sound was blocked – fallback to muted playback
                     v.muted = true;
                     v.play().catch(() => {});
                 });
             }
         }
-
 
         function pauseVideo() {
             if (!isVideo()) return;
@@ -593,7 +570,6 @@ document.addEventListener("DOMContentLoaded", () => {
             startX = e.clientX;
             startY = e.clientY;
 
-            // запланируем hold (если не свайп)
             clearHoldTimer();
             holdTimer = setTimeout(() => {
                 if (isDragging) return;
@@ -609,7 +585,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const dx = e.clientX - startX;
             const dy = e.clientY - startY;
 
-            // вертикальный жест - считаем скроллом, отменяем
+            // Vertical gesture detected – treat as scroll and cancel swipe
             if (Math.abs(dy) > SWIPE_MAX_Y && Math.abs(dy) > Math.abs(dx)) {
                 pointerDown = false;
                 setDragging(false);
@@ -618,7 +594,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            // старт drag
+            // Start horizontal drag
             if (!isDragging && Math.abs(dx) > 8) {
                 isDragging = true;
                 setDragging(true);
@@ -627,7 +603,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (!isDragging) return;
 
-            // “резина” на краях
+            // Apply rubber-band effect on edges
             let limitedDx = dx;
             if (currentIndex === 0 && dx > 0) limitedDx = dx * 0.35;
             if (currentIndex === slides.length - 1 && dx < 0) limitedDx = dx * 0.35;
@@ -642,7 +618,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             clearHoldTimer();
 
-            // если был hold - отпустили -> продолжаем
+            // If the story was paused by hold – resume and exit
             if (isHoldPaused) {
                 resumeStoryHold();
                 dragOffset = 0;
@@ -650,7 +626,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            // не свайпали -> просто продолжаем
+            // No swipe detected – just continue autoplay
             if (!isDragging) {
                 autoplay();
                 return;
@@ -660,10 +636,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const dx = dragOffset;
 
+            // Swipe threshold reached
             if (Math.abs(dx) >= SWIPE_MIN_PX) {
                 if (dx < 0) next();
                 else prev();
             } else {
+                // Snap back to the current slide
                 translateTo(currentIndex);
                 autoplay();
             }
