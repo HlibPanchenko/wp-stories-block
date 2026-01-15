@@ -19,8 +19,8 @@
     display: flex;
     align-items: flex-start;
     gap: 12px;
-    margin: 0;
-    padding: 0 10px;
+    margin: 0 !important;
+    padding: 0 10px !important;
     list-style: none;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
@@ -28,7 +28,6 @@
 }
 
 .wpstb-timeline {
-    margin: 0;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
 
@@ -246,6 +245,29 @@ body.menu-open .wpstb-slide.is-active {
     -ms-user-select: none;
     -o-user-select: none;
     pointer-events: none;
+}
+
+.wpstb-video-overlay{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background: rgba(0,0,0,.35);
+    z-index: 4;
+}
+
+.wpstb-video-overlay[hidden]{ display:none; }
+
+.wpstb-video-overlay__btn{
+    appearance:none;
+    border:0;
+    padding:12px 16px;
+    border-radius:999px;
+    background:#fff;
+    color:#000;
+    font-weight:700;
+    cursor:pointer;
 }
 
 /* Nav */
