@@ -17,8 +17,9 @@ add_action('acf/init', function () {
         'category'        => 'widgets',
         'icon'            => 'format-video',
         'keywords'        => ['stories', 'video', 'models'],
-        'mode'            => 'preview',
+        'mode'            => 'edit',
         'supports'        => [
+            'mode' => true,
             'align' => false,
             'jsx'   => false,
         ],

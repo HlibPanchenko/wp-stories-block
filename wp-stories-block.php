@@ -3,7 +3,7 @@
  * Plugin Name: WP Stories Block
  * Description: ACF Gutenberg block that renders stories block.
  * Version: 1.0.2
- * Author: Petr
+ * Author: PetrWP
  */
 
 defined('ABSPATH') || exit;
@@ -14,13 +14,11 @@ define('WPSTB_URL', plugin_dir_url(__FILE__));
 
 add_action('plugins_loaded', function () {
 
-    // ACF not active
     if (!function_exists('get_field') || !function_exists('acf_register_block_type')) {
         add_action('admin_notices', 'wpstb_acf_missing_notice');
         return;
     }
 
-    // ACF ok -> include ACF-related parts
     require_once WPSTB_PATH . 'inc/bootstrap.php';
 });
 

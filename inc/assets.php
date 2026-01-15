@@ -1,19 +1,15 @@
 <?php
 defined('ABSPATH') || exit;
 
-/**
- * Register assets
- */
-add_action('init', function () {
-
-    wp_register_style(
+add_action('wp_enqueue_scripts', function () {
+    wp_enqueue_style(
         'wpstb-style',
         WPSTB_URL . 'assets/style.css',
         [],
         '1.0.0'
     );
 
-    wp_register_script(
+    wp_enqueue_script(
         'wpstb-script',
         WPSTB_URL . 'assets/script.js',
         [],
@@ -22,10 +18,11 @@ add_action('init', function () {
     );
 });
 
-/**
- * Enqueue assets
- */
-add_action('wp_enqueue_scripts', function () {
-    wp_enqueue_style('wpstb-style');
-    wp_enqueue_script('wpstb-script');
+add_action('enqueue_block_assets', function () {
+    wp_enqueue_style(
+        'wpstb-style-admin',
+        WPSTB_URL . 'assets/admin.css',
+        [],
+        '1.0.0'
+    );
 });
