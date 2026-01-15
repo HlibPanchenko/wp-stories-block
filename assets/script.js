@@ -563,6 +563,11 @@ document.addEventListener("DOMContentLoaded", () => {
             if (modal.hidden) return;
             if (document.body.classList.contains("menu-open")) return;
 
+            // If the user interacts with controls/links - do not start swipe/hold logic
+            if (e.target.closest("[data-wpstb-profile], [data-wpstb-close], [data-wpstb-prev], [data-wpstb-next], a, button")) {
+                return;
+            }
+
             pointerDown = true;
             isDragging = false;
             dragOffset = 0;
