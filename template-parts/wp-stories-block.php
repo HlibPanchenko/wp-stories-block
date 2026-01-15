@@ -31,50 +31,47 @@ $displayStory = function ($id, $title, $link, $date, $profile_image, $preview, $
     $preview_safe       = esc_url((string) $preview);
     $video_safe         = esc_url((string) $video);
 
-    // Circle image (avatar/preview)
     $img_src = $profile_image_safe;
 
     ob_start();
     ?>
-    <li class="wpstb-story story"
+    <li class="wpstb-timeline__item"
         data-id="<?php echo esc_attr($id); ?>"
         data-last-updated="<?php echo esc_attr($date); ?>"
         data-photo="<?php echo esc_attr($profile_image_safe); ?>">
 
-        <div class="wpstb-ring">
-            <div class="wpstb-avatar-link item-link">
-                <img class="wpstb-avatar no-lazy"
+        <div class="wpstb-timeline__ring">
+            <div class="wpstb-timeline__trigger" data-wpstb-open>
+                <img class="wpstb-timeline__avatar no-lazy"
                      src="<?php echo esc_url($img_src); ?>"
                      alt="<?php echo esc_attr($title_clean); ?>">
 
-                <!-- оставил info/time чтобы твой JS мог жить как раньше -->
-                <span class="info" itemprop="author" style="display:none">
-                    <strong class="name" itemprop="name"><?php echo esc_html($title_clean); ?></strong>
-                    <span class="time"></span>
+                <span class="wpstb-timeline__meta" itemprop="author" style="display:none">
+                    <strong class="wpstb-timeline__meta-name" itemprop="name"><?php echo esc_html($title_clean); ?></strong>
+                    <span class="wpstb-timeline__meta-time"></span>
                 </span>
 
-                <img class="no-lazy profile"
+                <img class="wpstb-timeline__profile no-lazy"
                      src="<?php echo esc_url($profile_image_safe); ?>"
                      alt="<?php echo esc_attr($title_clean); ?>"
                      style="display:none">
             </div>
         </div>
 
-        <span class="wpstb-name name">
+        <span class="wpstb-timeline__name">
             <?php echo esc_html($title_clean); ?>
         </span>
 
-        <!-- hidden items payload (js reads it) -->
         <?php
-            $media_url = $video_safe ?: $profile_image_safe;
+        $media_url = $video_safe ?: $profile_image_safe;
 
-            $is_video = (bool) preg_match('~\.(mp4|webm|ogg)(\?.*)?$~i', $media_url);
-            $type     = $is_video ? 'video' : 'image';
+        $is_video = (bool) preg_match('~\.(mp4|webm|ogg)(\?.*)?$~i', $media_url);
+        $type     = $is_video ? 'video' : 'image';
 
-            $timeout  = 6000;
+        $timeout  = 6000;
         ?>
 
-        <ul class="items" style="display:none">
+        <ul class="wpstb-timeline__items" style="display:none">
             <li data-id="<?php echo esc_attr($id); ?>"
                 data-time="<?php echo esc_attr($date); ?>"
                 data-timeout="<?php echo esc_attr($timeout); ?>">
@@ -96,15 +93,15 @@ $displayStory = function ($id, $title, $link, $date, $profile_image, $preview, $
 
 ?>
 <div id="<?php echo esc_attr($uniq_id); ?>"
-     class="wp-stories-block"
+     class="wpstb"
      data-wpstb="1">
 
     <?php if (!empty($title)) : ?>
-        <h2 class="h3 stories-title"><?php echo esc_html($title); ?></h2>
+        <h2 class="wpstb__title"><?php echo esc_html($title); ?></h2>
     <?php endif; ?>
 
-    <div class="wpstb-screen">
-        <ul class="wpstb-stories stories-timeline" data-wpstb-timeline>
+    <div class="wpstb__screen">
+        <ul class="wpstb-timeline" data-wpstb-timeline>
             <?php
             if (!empty($mode) && $mode === true) {
 
@@ -126,14 +123,12 @@ $displayStory = function ($id, $title, $link, $date, $profile_image, $preview, $
                                 $story_date,
                                 $story_prev,
                                 $story_prev,
-                                $story_media,
-                                $displayStory
+                                $story_media
                         );
                     }
                 }
 
             } else {
-                // MODE = auto (models query)
                 $args = [
                         'post_type'      => 'models',
                         'posts_per_page' => $stories_amount > 0 ? $stories_amount : 10,
@@ -177,9 +172,7 @@ $displayStory = function ($id, $title, $link, $date, $profile_image, $preview, $
                                     $video_url = $url;
                                 }
 
-                                if ($profile_image_url && $video_url) {
-                                    break;
-                                }
+                                if ($profile_image_url && $video_url) break;
                             }
                         }
 
@@ -194,7 +187,7 @@ $displayStory = function ($id, $title, $link, $date, $profile_image, $preview, $
                                 $story_date,
                                 $profile_image_url,
                                 $preview_url,
-                                $video_url,
+                                $video_url
                         );
                     }
                     wp_reset_postdata();
@@ -204,29 +197,29 @@ $displayStory = function ($id, $title, $link, $date, $profile_image, $preview, $
         </ul>
     </div>
 
-    <div class="daily-stories" hidden data-wpstb-modal>
-        <div class="daily-stories__backdrop" data-wpstb-close></div>
+    <div class="wpstb-modal" hidden data-wpstb-modal>
+        <div class="wpstb-modal__backdrop" data-wpstb-close></div>
 
-        <div class="daily-stories__outer">
-            <div class="progress-bars" data-count="0" data-wpstb-bars></div>
+        <div class="wpstb-modal__frame">
+            <div class="wpstb-modal__progress" data-count="0" data-wpstb-bars></div>
 
-            <a class="daily-stories__profile" data-wpstb-profile hidden>
-                <img class="daily-stories__profile-img" data-wpstb-profile-img alt="">
-                <span class="daily-stories__profile-name" data-wpstb-profile-name></span>
+            <a class="wpstb-modal__profile" data-wpstb-profile hidden>
+                <img class="wpstb-modal__profile-img" data-wpstb-profile-img alt="">
+                <span class="wpstb-modal__profile-name" data-wpstb-profile-name></span>
             </a>
 
-            <div class="daily-stories__container" data-wpstb-slides></div>
+            <div class="wpstb-modal__slides" data-wpstb-slides></div>
         </div>
 
-
-        <span id="prev-slide" data-wpstb-prev>
-            <?php echo getInlineSvg('arrow'); ?>
-        </span>
-        <span id="next-slide" data-wpstb-next>
+        <span class="wpstb-modal__nav wpstb-modal__nav--prev" data-wpstb-prev>
             <?php echo getInlineSvg('arrow'); ?>
         </span>
 
-        <button type="button" class="daily-stories__close" data-wpstb-close aria-label="Close">
+        <span class="wpstb-modal__nav wpstb-modal__nav--next" data-wpstb-next>
+            <?php echo getInlineSvg('arrow'); ?>
+        </span>
+
+        <button type="button" class="wpstb-modal__close" data-wpstb-close aria-label="Close">
             <?php echo getInlineSvg('close'); ?>
         </button>
     </div>

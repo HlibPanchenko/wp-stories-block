@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const blocks = document.querySelectorAll('.wp-stories-block[data-wpstb="1"]');
+    const blocks = document.querySelectorAll('.wpstb[data-wpstb="1"]');
+
     if (!blocks.length) return;
 
     const IS_MOBILE = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -13,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!timeline || !modal) return;
 
         // DOM
-        const outer = modal.querySelector(".daily-stories__outer");
+        const outer = modal.querySelector(".wpstb-modal__frame");
         const slidesWrap = modal.querySelector("[data-wpstb-slides]");
         const barsWrap = modal.querySelector("[data-wpstb-bars]");
         const prevBtn = modal.querySelector("[data-wpstb-prev]");
@@ -109,15 +110,16 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         function onTimelineClick(e) {
-            const link = e.target.closest(".item-link");
+            const link = e.target.closest("[data-wpstb-open]");
             if (!link) return;
 
-            const story = link.closest(".story");
+            const story = link.closest(".wpstb-timeline__item");
             if (!story) return;
 
             e.preventDefault();
 
-            storyNodes = Array.from(timeline.querySelectorAll(".story"));
+            storyNodes = Array.from(timeline.querySelectorAll(".wpstb-timeline__item"));
+
             const idx = storyNodes.indexOf(story);
             currentStoryIndex = idx >= 0 ? idx : 0;
 
@@ -211,8 +213,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         function setSlideActive(i) {
-            slides.forEach((el) => el.classList.remove("active"));
-            if (slides[i]) slides[i].classList.add("active");
+            slides.forEach((el) => el.classList.remove("is-active"));
+            if (slides[i]) slides[i].classList.add("is-active");
 
             stopVideo();
             playVideo();
@@ -221,15 +223,15 @@ document.addEventListener("DOMContentLoaded", () => {
         function setBarActive(i) {
             bars.forEach((bar, idx) => {
                 if (idx < i) {
-                    bar.classList.add("seen");
-                    bar.classList.remove("animate");
+                    bar.classList.add("is-seen");
+                    bar.classList.remove("is-animating");
                 } else {
-                    bar.classList.remove("seen");
-                    bar.classList.remove("animate");
+                    bar.classList.remove("is-seen");
+                    bar.classList.remove("is-animating");
                 }
             });
 
-            if (bars[i]) bars[i].classList.add("animate");
+            if (bars[i]) bars[i].classList.add("is-animating");
         }
 
         function updateHeader() {
@@ -278,20 +280,34 @@ document.addEventListener("DOMContentLoaded", () => {
         // Video helpers
         // ---------------------------
         function isVideo(i = currentIndex) {
-            return slides[i] && slides[i].classList.contains("video");
+            return slides[i] && slides[i].classList.contains("wpstb-slide--video");
         }
 
         function playVideo() {
             if (!isVideo()) return;
+
             const v = slides[currentIndex].querySelector("video");
             if (!v) return;
 
-            // звук:
-            // - на iOS автоплей со звуком почти всегда запрещен
-            // - поэтому muted=false не гарантирует звук
+            // iOS/Chrome любят playsinline + muted для автоплея
+            v.playsInline = true;
+            v.setAttribute("playsinline", "");
+            v.preload = "metadata";
+
+            // пытаемся играть со звуком (иногда прокатывает на desktop)
             v.muted = false;
-            v.play().catch(() => {});
+
+            const p = v.play();
+
+            if (p && typeof p.catch === "function") {
+                p.catch(() => {
+                    // автоплей со звуком не дали - играем без звука
+                    v.muted = true;
+                    v.play().catch(() => {});
+                });
+            }
         }
+
 
         function pauseVideo() {
             if (!isVideo()) return;
@@ -401,7 +417,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         function openStoryByIndex(storyIndex) {
-            if (!storyNodes.length) storyNodes = Array.from(timeline.querySelectorAll(".story"));
+            if (!storyNodes.length) {
+                storyNodes = Array.from(timeline.querySelectorAll(".wpstb-timeline__item"));
+            }
             if (!storyNodes.length) return false;
 
             // конец списка: закрываем
@@ -429,8 +447,8 @@ document.addEventListener("DOMContentLoaded", () => {
         // Build story -> slides + bars
         // ---------------------------
         function buildFromStory(storyEl) {
-            const items = storyEl.querySelectorAll(".items li a");
-            const firstItem = storyEl.querySelector(".items li a");
+            const items = storyEl.querySelectorAll(".wpstb-timeline__items li a");
+            const firstItem = storyEl.querySelector(".wpstb-timeline__items li a");
 
             if (!items.length) return false;
 
@@ -470,11 +488,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 timeouts.push(initialT);
 
                 const slide = document.createElement("div");
-                slide.className = "slide";
+                slide.className = "wpstb-slide";
                 slide.setAttribute("data-timeout", String(initialT));
 
                 if (isVid) {
-                    slide.classList.add("video");
+                    slide.classList.add("wpstb-slide--video");
                     slide.innerHTML = `
             <video playsinline preload="metadata">
               <source src="${href}">
@@ -493,7 +511,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             timeouts[idx] = finalDuration;
                             slide.setAttribute("data-timeout", String(finalDuration));
 
-                            const barSpan = barsWrap.querySelector(`.bar[data-index="${idx}"] span`);
+                            const barSpan = barsWrap.querySelector(`.wpstb-bar[data-index="${idx}"] span`);
                             if (barSpan) barSpan.style.animationDuration = `${finalDuration}ms`;
 
                             if (idx === currentIndex && !modal.hidden && !isHoldPaused) autoplay(finalDuration);
@@ -508,7 +526,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 slides.push(slide);
 
                 const bar = document.createElement("div");
-                bar.className = "bar" + (isVid ? " video" : "");
+                bar.className = "wpstb-bar" + (isVid ? " wpstb-bar--video" : "");
                 bar.setAttribute("data-index", String(idx));
                 bar.innerHTML = `<span style="animation-duration:${initialT}ms;"></span>`;
                 fragBars.appendChild(bar);
@@ -518,7 +536,7 @@ document.addEventListener("DOMContentLoaded", () => {
             barsWrap.appendChild(fragBars);
             barsWrap.setAttribute("data-count", String(slides.length));
 
-            bars = Array.from(barsWrap.querySelectorAll(".bar"));
+            bars = Array.from(barsWrap.querySelectorAll(".wpstb-bar"));
             bars.forEach((bar) => {
                 bar.addEventListener("click", () => {
                     const i = parseInt(bar.getAttribute("data-index"), 10);
