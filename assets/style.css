@@ -156,6 +156,9 @@ video {
     border: 0;
     background: none;
     cursor: pointer;
+    &:focus {
+        outline: none;
+    }
 }
 
 .wpstb-modal__close svg {
@@ -293,6 +296,7 @@ body.mobile .wpstb-modal__nav {
     height: 100px;
     display: flex;
     z-index: 999;
+    pointer-events: none;
 }
 
 .wpstb-modal__progress::before {
