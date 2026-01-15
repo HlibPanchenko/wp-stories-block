@@ -35,9 +35,9 @@ function wpstb_render_admin_page() {
                 Add the <b>WP Stories Block</b> (Widgets category).
                 <div style="margin: 12px 0;">
                     <img
-                        src="<?php echo esc_url(WPSTB_URL . 'assets/media/acf-block.jpg'); ?>"
-                        alt="WP Stories Block in Gutenberg"
-                        style="max-width:100%; height:auto; border:1px solid #ddd; border-radius:4px;">
+                            src="<?php echo esc_url(WPSTB_URL . 'assets/media/acf-block.jpg'); ?>"
+                            alt="WP Stories Block in Gutenberg"
+                            style="max-width:100%; height:auto; border:1px solid #ddd; border-radius:4px;">
                 </div>
             </li>
 
@@ -48,7 +48,7 @@ function wpstb_render_admin_page() {
                     <li><b>Switch Stories Mode</b>:
                         <ul>
                             <li><b>Manually</b> – add stories manually using the repeater field.</li>
-                            <li><b>Random</b> – stories are loaded automatically from models that have video (acf field).</li>
+                            <li><b>Random</b> – stories are loaded automatically from models that have video (ACF field).</li>
                         </ul>
                     </li>
                     <li><b>Stories</b> (manual mode) – add preview image, media (image or video), title, and post link.</li>
@@ -57,14 +57,37 @@ function wpstb_render_admin_page() {
 
                 <div style="margin: 12px 0;">
                     <img
-                        src="<?php echo esc_url(WPSTB_URL . 'assets/media/acf-block-fields.jpg'); ?>"
-                        alt="WP Stories Block ACF Fields"
-                        style="max-width:100%; height:auto; border:1px solid #ddd; border-radius:4px;">
+                            src="<?php echo esc_url(WPSTB_URL . 'assets/media/acf-block-fields.jpg'); ?>"
+                            alt="WP Stories Block ACF Fields"
+                            style="max-width:100%; height:auto; border:1px solid #ddd; border-radius:4px;">
                 </div>
             </li>
 
-            <li>Save the page – the stories feed will appear on the frontend.</li>
+            <li>
+                Save the page – the stories feed will appear on the frontend.
+                <div style="margin: 12px 0;">
+                    <img
+                            src="<?php echo esc_url(WPSTB_URL . 'assets/media/stories-feed.jpg'); ?>"
+                            alt="WP Stories feed on frontend"
+                            style="max-width:100%; height:auto; border:1px solid #ddd; border-radius:4px;">
+                </div>
+            </li>
         </ol>
+
+        <hr>
+
+        <h2>Story view example</h2>
+
+        <p style="max-width: 900px; font-size: 14px;">
+            Clicking a story opens it in a fullscreen modal with autoplay, progress bars, and swipe navigation.
+        </p>
+
+        <div style="max-width: 900px; margin: 12px 0;">
+            <img
+                    src="<?php echo esc_url(WPSTB_URL . 'assets/media/story-view.jpg'); ?>"
+                    alt="WP Stories fullscreen view"
+                    style="max-width:100%; height:auto; border:1px solid #ddd; border-radius:4px;">
+        </div>
 
         <hr>
 

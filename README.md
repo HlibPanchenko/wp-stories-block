@@ -28,6 +28,8 @@ It renders a horizontal stories feed on the frontend and opens stories in a full
 - Advanced Custom Fields (ACF) PRO or Free (with block support)
 - PHP 7.0+
 
+> Requires ACF (free or pro).
+
 ---
 
 ## How to use
@@ -49,14 +51,14 @@ The block provides several configuration options:
   Optional heading displayed above the stories feed.
 
 - **Switch Stories Mode**
-    - **Manually** – universal mode. Stories are added manually using the repeater field and will work with **any theme**. This is the recommended and most flexible option.
-    - **Random** – theme-specific mode. Stories are loaded automatically from the **`models` CPT** that have video (ACF field). This option depends on the current theme structure and is intended for projects where the `models` post type already exists.
+  - **Manually** – universal mode. Stories are added manually using the repeater field and will work with **any theme**. This is the recommended and most flexible option.
+  - **Random** – theme-specific mode. Stories are loaded automatically from the **`models` CPT** that have video (ACF field). This option depends on the current theme structure and is intended for projects where the `models` post type already exists.
 
 - **Stories** (Manual mode)
-    - Preview image
-    - Media (image or video)
-    - Title
-    - Post link (models, posts, or pages)
+  - Preview image
+  - Media (image or video)
+  - Title
+  - Post link (models, posts, or pages)
 
 - **Number of stories** (Random mode)  
   Controls how many stories are displayed.
@@ -69,7 +71,13 @@ The block provides several configuration options:
 
 After saving, the stories feed will appear on the frontend.
 
-Clicking a story opens it in a fullscreen modal.
+Here is how the stories feed looks on the frontend:
+
+![Stories feed preview](assets/media/stories-feed.jpg)
+
+Clicking a story opens it in a fullscreen modal:
+
+![Story view preview](assets/media/story-view.jpg)
 
 ---
 
@@ -105,4 +113,3 @@ Clicking a story opens it in a fullscreen modal.
 ## License
 
 MIT
-
