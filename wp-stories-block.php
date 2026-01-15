@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WP Stories Block
  * Description: ACF Gutenberg block that renders stories block.
- * Version: 1.0.2
+ * Version: 1.0.3
  * Author: PetrWP
  */
 

@@ -267,21 +267,27 @@ document.addEventListener("DOMContentLoaded", () => {
             const v = slides[currentIndex].querySelector("video");
             if (!v) return;
 
-            // iOS and Chrome require playsinline + muted for autoplay
-            v.playsInline = true;
+            // iOS needs these attributes on the element itself
             v.setAttribute("playsinline", "");
-            v.preload = "metadata";
+            v.setAttribute("webkit-playsinline", "");
+            v.playsInline = true;
 
-            // Try to play with sound first (may work on desktop)
-            v.muted = false;
+            v.preload = "auto";
+
+            // iOS autoplay requires muted
+            v.muted = true;
+            v.setAttribute("muted", "");
+
+            // make sure it starts from the beginning
+            try { if (v.currentTime > 0) v.currentTime = 0; } catch (e) {}
+
+            // force reload on iOS sometimes helps with black screen
+            v.load();
 
             const p = v.play();
-
             if (p && typeof p.catch === "function") {
                 p.catch(() => {
-                    // Autoplay with sound was blocked – fallback to muted playback
-                    v.muted = true;
-                    v.play().catch(() => {});
+                    // keep muted as fallback
                 });
             }
         }
@@ -297,8 +303,12 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!isVideo()) return;
             const v = slides[currentIndex].querySelector("video");
             if (!v) return;
+
             v.pause();
-            try { v.currentTime = 0; } catch (e) {}
+
+            if (v.readyState > 0) {
+                try { v.currentTime = 0; } catch (e) {}
+            }
         }
 
         // ---------------------------
@@ -471,10 +481,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (isVid) {
                     slide.classList.add("wpstb-slide--video");
                     slide.innerHTML = `
-            <video playsinline preload="metadata">
-              <source src="${href}">
-            </video>
-          `;
+                          <video playsinline webkit-playsinline muted preload="auto">
+                            <source src="${href}" type="video/mp4">
+                          </video>
+                        `;
 
                     const videoEl = slide.querySelector("video");
                     if (videoEl) {
